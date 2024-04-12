@@ -20,7 +20,10 @@
 >
   <#assign cardHeader>
     <@logo.kw>
-      ${kcSanitize(msg("loginTitleHtml", (realm.displayNameHtml!"")))?no_esc}
+      <div class="text-center" id="pig-page-logo-wrapper">
+        <img  class="inline justify-center h-20" src="${url.resourcesPath}/logos/pub-invest.svg" />
+      </div>
+      <span id="pig-page-title" class="hidden">${kcSanitize(msg("loginTitleHtml", (realm.displayNameHtml!"")))?no_esc}</span>
     </@logo.kw>
     <#if !(auth?has_content && auth.showUsername() && !auth.showResetCredentials())>
       <@heading.kw>

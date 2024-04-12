@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
   content: ['./theme/**/*.ftl'],
@@ -9,6 +10,10 @@ export default {
   plugins: [require('@tailwindcss/forms')],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['Montserrat', ...fontFamily.sans],
+        'serif': ['Montserrat', ...fontFamily.serif],
+      },
       colors: {
         primary: colors.blue,
         secondary: colors.gray,

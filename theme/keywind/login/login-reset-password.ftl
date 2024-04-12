@@ -35,7 +35,9 @@
       </@buttonGroup.kw>
     </@form.kw>
   <#elseif section="info">
-    ${msg("emailInstruction")}
+    <div class="text-center">
+      ${msg("emailInstruction")}
+    </div>
   <#elseif section="nav">
     <@link.kw color="secondary" href=url.loginUrl size="small">
       ${kcSanitize(msg("backToLogin"))?no_esc}

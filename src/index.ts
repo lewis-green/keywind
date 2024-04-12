@@ -1,3 +1,4 @@
+import './styles/font.css';
 import './index.css';
 
 import Alpine from 'alpinejs';

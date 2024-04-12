@@ -1,4 +1,4 @@
-<#macro kw color="" component="a" size="" rest...>
+<#macro kw color="" component="a" size="" class="" rest...>
   <#switch color>
     <#case "primary">
       <#assign colorClass="text-primary-600 hover:text-primary-500">
@@ -19,7 +19,7 @@
   </#switch>
 
   <${component}
-    class="<#compress>${colorClass} ${sizeClass} inline-flex</#compress>"
+    class="<#compress>${colorClass} ${sizeClass} inline-flex ${class}</#compress>"
 
     <#list rest as attrName, attrValue>
       ${attrName}="${attrValue}"

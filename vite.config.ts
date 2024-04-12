@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  base: '',
   build: {
     rollupOptions: {
       input: [
@@ -10,10 +11,10 @@ export default defineConfig({
         'src/data/webAuthnRegister.ts',
       ],
       output: {
-        assetFileNames: '[name][extname]',
+        assetFileNames: (chunkInfo) => chunkInfo.name.indexOf(".otf") > -1 ? 'fonts/[name][extname]' : '[name][extname]', //'css/[name][extname]',
         dir: 'theme/keywind/login/resources/dist',
         entryFileNames: '[name].js',
       },
     },
-  },
+  }
 });

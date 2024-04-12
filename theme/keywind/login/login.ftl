@@ -1,5 +1,6 @@
 <#import "template.ftl" as layout>
 <#import "components/atoms/button.ftl" as button>
+<#import "components/atoms/link-button.ftl" as linkButton>
 <#import "components/atoms/button-group.ftl" as buttonGroup>
 <#import "components/atoms/checkbox.ftl" as checkbox>
 <#import "components/atoms/form.ftl" as form>
@@ -56,27 +57,31 @@
                 name="rememberMe"
               />
             </#if>
-            <#if realm.resetPasswordAllowed>
-              <@link.kw color="primary" href=url.loginResetCredentialsUrl size="small">
-                ${msg("doForgotPassword")}
-              </@link.kw>
-            </#if>
           </div>
         </#if>
         <@buttonGroup.kw>
           <@button.kw color="primary" name="login" type="submit">
             ${msg("doLogIn")}
           </@button.kw>
+          <#if realm.resetPasswordAllowed>
+            <@linkButton.kw color="outline-secondary" href=url.loginResetCredentialsUrl size="small">
+              ${msg("doForgotPassword")}
+            </@linkButton.kw>
+          </#if>
         </@buttonGroup.kw>
       </@form.kw>
     </#if>
   <#elseif section="info">
     <#if realm.password && realm.registrationAllowed && !registrationDisabled??>
       <div class="text-center">
-        ${msg("noAccount")}
-        <@link.kw color="primary" href=url.registrationUrl>
-          ${msg("doRegister")}
-        </@link.kw>
+        <@buttonGroup.kw>
+          <span class="mb-2">${msg("noAccount")}</span>
+          <div class="grid grid-cols-1 gap-4 justify-center">
+          <@linkButton.kw color="secondary" href=url.registrationUrl>
+            ${msg("doRegister")}
+          </@linkButton.kw>
+          </div>
+        </@buttonGroup.kw>
       </div>
     </#if>
   <#elseif section="socialProviders">
@@ -84,4 +89,5 @@
       <@identityProvider.kw providers=social.providers />
     </#if>
   </#if>
+
 </@layout.registrationLayout>
