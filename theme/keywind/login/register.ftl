@@ -4,6 +4,8 @@
 <#import "components/atoms/form.ftl" as form>
 <#import "components/atoms/input.ftl" as input>
 <#import "components/atoms/link.ftl" as link>
+<#import "user-profile-commons.ftl" as userProfileCommons>
+<#import "register-commons.ftl" as registerCommons>
 
 <@layout.registrationLayout
   displayMessage=!messagesPerField.existsError("firstName", "lastName", "email", "username", "password", "password-confirm")
@@ -14,63 +16,39 @@
     ${msg("registerTitle")}
   <#elseif section="form">
     <@form.kw action=url.registrationAction method="post">
-      <@input.kw
-        autocomplete="given-name"
-        autofocus=true
-        invalid=messagesPerField.existsError("firstName")
-        label=msg("firstName")
-        message=kcSanitize(messagesPerField.get("firstName"))
-        name="firstName"
-        type="text"
-        value=(register.formData.firstName)!''
-      />
-      <@input.kw
-        autocomplete="family-name"
-        invalid=messagesPerField.existsError("lastName")
-        label=msg("lastName")
-        message=kcSanitize(messagesPerField.get("lastName"))
-        name="lastName"
-        type="text"
-        value=(register.formData.lastName)!''
-      />
-      <@input.kw
-        autocomplete="email"
-        invalid=messagesPerField.existsError("email")
-        label=msg("email")
-        message=kcSanitize(messagesPerField.get("email"))
-        name="email"
-        type="email"
-        value=(register.formData.email)!''
-      />
-      <#if !realm.registrationEmailAsUsername>
-        <@input.kw
-          autocomplete="username"
-          invalid=messagesPerField.existsError("username")
-          label=msg("username")
-          message=kcSanitize(messagesPerField.get("username"))
-          name="username"
-          type="text"
-          value=(register.formData.username)!''
-        />
-      </#if>
-      <#if passwordRequired??>
-        <@input.kw
-          autocomplete="new-password"
-          invalid=messagesPerField.existsError("password", "password-confirm")
-          label=msg("password")
-          message=kcSanitize(messagesPerField.getFirstError("password", "password-confirm"))
-          name="password"
-          type="password"
-        />
-        <@input.kw
-          autocomplete="new-password"
-          invalid=messagesPerField.existsError("password-confirm")
-          label=msg("passwordConfirm")
-          message=kcSanitize(messagesPerField.get("password-confirm"))
-          name="password-confirm"
-          type="password"
-        />
-      </#if>
+      <@userProfileCommons.userProfileFormFields; callback, attribute>
+        <#if callback = "afterField">
+            <#-- render password fields just under the username or email (if used as username) -->
+            <#if passwordRequired?? && (attribute.name == 'username' || (attribute.name == 'email' && realm.registrationEmailAsUsername))>
+              <div>
+                <label for="password" class="block text-sm font-medium leading-6 text-gray-900">${msg("password")}</label>
+                <div class="mt-2">
+                  <input type="password" id="password" name="password" value="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6 <#if messagesPerField.existsError('password')>ring-red-500 text-red-700<#else>ring-gray-300 text-gray-900 </#if>" aria-invalid="" autocomplete="password">
+
+                  <#if messagesPerField.existsError('password')>
+                    <p class="mt-2 text-sm text-red-600" id="input-error-password" aria-live="polite">
+                      ${kcSanitize(messagesPerField.get('password'))?no_esc}
+                    </p>
+                  </#if>
+                </div>
+              </div>
+              <div>
+                <label for="password-confirm" class="block text-sm font-medium leading-6 text-gray-900">${msg("passwordConfirm")}</label>
+                <div class="mt-2">
+                  <input type="password" id="password-confirm" name="password-confirm" value="" class="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6 <#if messagesPerField.existsError('password-confirm')>ring-red-500 text-red-700<#else>ring-gray-300 text-gray-900 </#if>" aria-invalid="" autocomplete="password">
+
+                  <#if messagesPerField.existsError('password-confirm')>
+                    <p class="mt-2 text-sm text-red-600" id="input-error-password" aria-live="polite">
+                      ${kcSanitize(messagesPerField.get('password-confirm'))?no_esc}
+                    </p>
+                  </#if>
+                </div>
+              </div>
+            </#if>
+        </#if>
+      </@userProfileCommons.userProfileFormFields>
+
+      <@registerCommons.termsAcceptance/>
       <#if recaptchaRequired??>
         <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}" data-size="compact"></div>
       </#if>
